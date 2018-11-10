@@ -5,8 +5,10 @@ def main():
     file_compresser = cp.FileCompresser()
     
     file_compresser.read_file(file_name)
-    file_compresser.compress()
-    print(file_compresser.phrases)
+    phrases = file_compresser.encode()
+    original_string = file_compresser.decode(phrases)
+    print(phrases)
+    print(original_string)
 
 if __name__ == '__main__':
     main()

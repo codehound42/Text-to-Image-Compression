@@ -55,8 +55,28 @@ class FileCompresser:
                 for c in line:
                    self.file_as_char_value_list.append(c)
     
-    def compress(self):
+    def encode(self):
         self.phrases = self.trie.generate_phrases(self.file_as_char_value_list)
+        return self.phrases
+    
+    def decode(self, phrases):
+        phrases_as_strings = ['']
+        p = 0
+        
+        # Read phrases left to right and generate segments of original string
+        while p < len(self.phrases):
+            phrase = self.phrases[p]
+            
+            phrase_pointer = phrase[0]
+            char = phrase[1]
+            
+            previous_string_copy = phrases_as_strings[phrase_pointer]
+            phrases_as_strings.append(previous_string_copy + char)
+            
+            p += 1
+        
+        # Return concatenated string segments
+        return ''.join(phrases_as_strings)
     
 
 
