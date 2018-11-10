@@ -1,6 +1,3 @@
-
-file_as_char_value_list = []
-phrases = []
     
 class Node:
     def __init__(self, phrase_num):
@@ -11,51 +8,56 @@ class Node:
         self.children[edge_label] = child
     
 class LZ78Trie:
-    current_phrase_number = 0
-    p = 0
     
     def __init__(self):
         self.root = Node(0)
     
-    def add_next_phrase(self):
-        parent = None
-        child = self.root
-        current_char_value = None
+    def add_next_phrase(self, phrases, current_phrase_number, p, char_list):
+        node = self.root
         
-        while child != None and LZ78Trie.p < len(file_as_char_value_list):
-            parent = child
-            current_char_value = file_as_char_value_list[LZ78Trie.p]
-            child = parent.children.get(current_char_value)
-            LZ78Trie.p += 1
+        # Search through trie
+        # Builds up next phrase until leaf node reached
+        while node != None and p < len(char_list):
+            parent = node
+            current_char_value = char_list[p]
+            node = parent.children.get(current_char_value)
+            p += 1
         
-        LZ78Trie.current_phrase_number += 1
-        new_child_node = Node(LZ78Trie.current_phrase_number)
+        new_child_node = Node(current_phrase_number)
         parent.add_child_node(new_child_node, current_char_value)
         
         phrases.append((parent.phrase_num, current_char_value))
         
-
-def read_file(file_name):
-    with open(file_name, 'r') as fh:
-        for line in fh:
-            for c in line:
-                file_as_char_value_list.append(c)
+        return p
+        
+    def generate_phrases(self, char_list):
+        phrases = []
+        p = 0
+        current_phrase_number = 0
+        
+        # Generate phrases for entire string
+        while p < len(char_list):
+            current_phrase_number += 1
+            p = self.add_next_phrase(phrases, current_phrase_number, p, char_list)
+            #print("next phrase, p: {}".format(p))
+            
+        return phrases
+        
+class FileCompresser:
     
-    #print(file_as_char_value_list)
-
-
-# === Main ===
-
-file_name = 'sample_text_file.txt'
-read_file(file_name)
-#file_as_char_value_list.append('$') # End of string
-
-trie = LZ78Trie()
-while trie.p < len(file_as_char_value_list):
-    trie.add_next_phrase()
-
-#print(trie.root.children)
-print(phrases)
+    def __init__(self):
+        self.trie = LZ78Trie()
+    
+    def read_file(self, file_name):
+        self.file_as_char_value_list = []
+        with open(file_name, 'r') as fh:
+            for line in fh:
+                for c in line:
+                   self.file_as_char_value_list.append(c)
+    
+    def compress(self):
+        self.phrases = self.trie.generate_phrases(self.file_as_char_value_list)
+    
 
 
 
