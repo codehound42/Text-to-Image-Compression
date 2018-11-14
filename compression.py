@@ -77,9 +77,5 @@ class FileCompresser:
         
         # Return concatenated string segments
         return ''.join(phrases_as_strings)
-    
-
-
-
 
 
