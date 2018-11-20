@@ -27,7 +27,7 @@ def read_image(file_path):
             char = chr(rgb_values_to_int(red2, green2, blue2))
             phrases.append((phrase_pointer, char))
     
-    print(phrases)
+    #print(phrases)
     return phrases
 
 def generate_original_file(file_path, file_contents):
@@ -53,7 +53,7 @@ def render_image(file_path, phrases):
             
             current_phrase_index += 1
     
-    print(pixels)
+    #print(pixels)
     
     # Render image
     img = Image.new("RGB", (width,height))
@@ -63,21 +63,21 @@ def render_image(file_path, phrases):
     
 # Quick simple manual test
 def main():
-    file_name = 'sample_text_file.txt'
+    file_name = 'shakespeare_complete_works.txt'
     file_compresser = cp.FileCompresser()
     
     file_compresser.read_file(file_name)
     phrases = file_compresser.encode()
-    print(phrases)
+    #print(phrases)
     
-    file_path = 'message_image.png'
+    file_path = 'shakespeare_complete_works_image.png'
     render_image(file_path, phrases)
     print('done rendering')
     phrases = read_image(file_path)
     print('done reading image')
     original_string = file_compresser.decode(phrases)
-    print(original_string)
-    generate_original_file('out.txt', original_string)
+    #print(original_string)
+    generate_original_file('shakespeare_complete_works_out.txt', original_string)
     print('done writing compressed message contents to file')
 
 if __name__ == '__main__':

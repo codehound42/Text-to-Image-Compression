@@ -50,8 +50,9 @@ class FileCompresser:
     
     def read_file(self, file_name):
         self.file_as_char_value_list = []
-        with open(file_name, 'r') as fh:
+        with open(file_name, 'r', encoding="utf8") as fh:
             for line in fh:
+                #print(line)
                 for c in line:
                    self.file_as_char_value_list.append(c)
     
