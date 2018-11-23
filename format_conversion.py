@@ -1,4 +1,4 @@
-import compression as cp
+from text_compression import TextCompresser
 import numpy as np
 from PIL import Image
 
@@ -30,10 +30,6 @@ def read_image(file_path):
     #print(phrases)
     return phrases
 
-def generate_original_file(file_path, file_contents):
-    file = open(file_path, 'w') # Create a file if it does not already exist
-    file.write(file_contents)
-
 def render_image(file_path, phrases):
     height = int(np.sqrt(len(phrases)))
     width = 2*height
@@ -59,26 +55,26 @@ def render_image(file_path, phrases):
     img = Image.new("RGB", (width,height))
     img.putdata(pixels)
     img.save(file_path)
-    
-    
-# Quick simple manual test
-def main():
-    file_name = 'shakespeare_complete_works.txt'
-    file_compresser = cp.FileCompresser()
-    
-    file_compresser.read_file(file_name)
-    phrases = file_compresser.encode()
-    #print(phrases)
-    
-    file_path = 'shakespeare_complete_works_image.png'
-    render_image(file_path, phrases)
-    print('done rendering')
-    phrases = read_image(file_path)
-    print('done reading image')
-    original_string = file_compresser.decode(phrases)
-    #print(original_string)
-    generate_original_file('shakespeare_complete_works_out.txt', original_string)
-    print('done writing compressed message contents to file')
 
-if __name__ == '__main__':
-    main()
+def generate_compressed_image_file(text_file_name, image_file_name):
+    file_compresser = TextCompresser()
+    
+    file_compresser.read_file(text_file_name)
+    phrases = file_compresser.encode()
+    
+    render_image(image_file_name, phrases)
+    print('done rendering')
+    
+    
+def generate_orignal_text_file(image_file_name, text_file_name):
+    file_compresser = TextCompresser()
+    
+    phrases = read_image(image_file_name)
+    print('done reading image')
+    
+    original_string = file_compresser.decode(phrases)
+    file = open(text_file_name, 'w') # Create a file if it does not already exist
+    file.write(original_string)
+    print('done writing to text file')
+    
+    

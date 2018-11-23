@@ -1,5 +1,6 @@
     
 class Node:
+    
     def __init__(self, phrase_num):
         self.phrase_num = phrase_num
         self.children = {}
@@ -43,18 +44,19 @@ class LZ78Trie:
             
         return phrases
         
-class FileCompresser:
+class TextCompresser:
     
     def __init__(self):
         self.trie = LZ78Trie()
+        self.file_as_char_value_list = []
     
     def read_file(self, file_name):
-        self.file_as_char_value_list = []
         with open(file_name, 'r', encoding="utf8") as fh:
             for line in fh:
                 #print(line)
                 for c in line:
-                   self.file_as_char_value_list.append(c)
+                    self.file_as_char_value_list.append(c)
+        return self.file_as_char_value_list
     
     def encode(self):
         self.phrases = self.trie.generate_phrases(self.file_as_char_value_list)
@@ -65,8 +67,8 @@ class FileCompresser:
         p = 0
         
         # Read phrases left to right and generate segments of original string
-        while p < len(self.phrases):
-            phrase = self.phrases[p]
+        while p < len(phrases):
+            phrase = phrases[p]
             
             phrase_pointer = phrase[0]
             char = phrase[1]
@@ -78,5 +80,4 @@ class FileCompresser:
         
         # Return concatenated string segments
         return ''.join(phrases_as_strings)
-
 
